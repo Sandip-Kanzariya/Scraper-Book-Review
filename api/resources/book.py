@@ -9,8 +9,19 @@ from models.books import Book
 # http://127.0.0.1:5050/books/
 class BookList(Resource):
     
+    
     def get(self):
-        return {"message": "Welcome to Book List"}
+        # All Scraped Data From Book 
+        books = Book.query.all()
+        response = []
+        for book in books:
+            response.append({
+                'Title': book.title,
+                'Author': book.author,
+                'BookLink': book.book_link,
+                'CoverLink': book.cover_link
+            })
+        return response
 
     def post(self):
         book_link_list = []
@@ -18,7 +29,7 @@ class BookList(Resource):
         book_author_list = []
         book_cover_link_list = []
 
-        for i in range(1,5):
+        for i in range(1,3):
             url = f"https://openlibrary.org/trending/daily?page={i}"
 
             webpage=requests.get(url).text
@@ -43,7 +54,7 @@ class BookList(Resource):
 
                     book_cover_link = book_cover[0].a.img['src']
                     book_cover_link = book_cover_link.replace('//', '', 1)
-                    book_cover_link_list.append(book_cover_link);
+                    book_cover_link_list.append(book_cover_link)
                     
 
                     # Etract Details of book 
@@ -54,14 +65,14 @@ class BookList(Resource):
                     book_title = book_details[0].find('h3', class_='booktitle').a.text
                     book_title_list.append(book_title)
                     
-                storebook = Book(
-                    title=book_title,
-                    author=book_author,
-                    book_link=book_link,
-                    cover_link=book_cover_link
-                )
-                db.session.add(storebook)
-                db.session.commit()
+                    storebook = Book(
+                        title=book_title,
+                        author=book_author,
+                        book_link=book_link,
+                        cover_link=book_cover_link
+                    )
+                    db.session.add(storebook)
+                    db.session.commit()
 
     
         results = {
