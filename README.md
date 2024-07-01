@@ -62,3 +62,10 @@ SQLALCHEMY_DATABASE_URI=POSTGRESQL_REMOTE_URL
 
 eg. https://scraper-book-review.onrender.com/books/2/reviews
 ```
+
+>Scraping of book Data
+![alt text](images/image.png) 
+> Add Review
+![alt text](images/image-1.png)
+>Get Review 
+![alt text](images/image-2.png)
